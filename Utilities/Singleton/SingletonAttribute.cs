@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Malgo.Singleton
+namespace Malgo.Utilities.Singleton
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     public class SingletonAttribute : Attribute

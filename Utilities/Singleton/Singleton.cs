@@ -1,8 +1,7 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Malgo.Singleton
+namespace Malgo.Utilities.Singleton
 {
     public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
