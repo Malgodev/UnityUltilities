@@ -57,6 +57,35 @@ namespace Malgo.Utilities
 
             return result.ToString();
         }
-    }
 
+        public static float ClampMaxFloat(float result)
+        {
+            if (float.IsInfinity(result) || result > float.MaxValue)
+            {
+                result = float.MaxValue;
+            }
+
+            if (float.IsNegativeInfinity(result) || result < float.MinValue)
+            {
+                result = float.MinValue;
+            }
+
+            return result;
+        }
+
+        public static float ClampMaxFloat(double result)
+        {
+            if (float.IsInfinity((float) result) || result > float.MaxValue)
+            {
+                result = float.MaxValue;
+            }
+
+            if (float.IsNegativeInfinity((float) result) || result < float.MinValue)
+            {
+                result = float.MinValue;
+            }
+
+            return (float) result;
+        }
+    }
 }
