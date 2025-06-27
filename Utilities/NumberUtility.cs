@@ -27,11 +27,11 @@ namespace Malgo.Utilities
             }
         }
 
-        private static readonly string[] suffixes = { "", "K", "M", "B", "T", "Q" };
+        private static readonly string[] suffixes = { "", "K", "M", "B", "T" };
 
-        public static string ToShortText(double value, int decimalPlaces = 2)
+        public static string NumberToString(double value, int decimalPlaces = 2)
         {
-            if (value < 1000) return value.ToString("0." + new string('#', decimalPlaces));
+            if (value < 1000) return value.ToString("0." + new string('0', decimalPlaces));
 
             int suffixIndex = 0;
             while (value >= 1000)
@@ -41,20 +41,17 @@ namespace Malgo.Utilities
             }
 
             if (suffixIndex < suffixes.Length)
-                return value.ToString("0." + new string('#', decimalPlaces)) + suffixes[suffixIndex];
+                return value.ToString("0." + new string('0', decimalPlaces)) + suffixes[suffixIndex];
 
             string letterSuffix = ConvertToLetterNotation(suffixIndex - suffixes.Length);
-
-            return value.ToString("0." + new string('#', decimalPlaces)) + letterSuffix;
+            return value.ToString("0." + new string('0', decimalPlaces)) + letterSuffix;
         }
 
         private static string ConvertToLetterNotation(long index)
         {
             StringBuilder result = new StringBuilder();
-
             result.Insert(0, (char)('a' + (int)(index / 26)));
             result.Insert(1, (char)('a' + (int)(index % 26)));
-
             return result.ToString();
         }
 
