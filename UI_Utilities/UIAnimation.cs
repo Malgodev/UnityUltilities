@@ -10,10 +10,11 @@ namespace Malgo.Utilities.UI
     {
         [SerializeField] private bool playOnStart = true;
 
+        [SerializeField] private CanvasGroup canvasGroup;
+
         [Space]
         [SerializeField] private List<AnimationType> uiAnimationType;
         [SerializeField] private Sequence sequence;
-
 
         [Header("Animation stat")]
         [SerializeField] private float animationDelay;
@@ -72,8 +73,32 @@ namespace Malgo.Utilities.UI
         [SerializeField] private ScaleAnimation scaleAnimationSettings;
 
 
+        [Serializable]
+        struct FadeAnimation
+        {
+            [Serializable]
+            public enum  FadeType
+            {
+                None,
+                FadeIn,
+                FadeOut,
+            }
+
+            public FadeType fadeType;
+            public float duration;
+            public float fadeOffset;
+            public Ease easeType;
+        }
+
+        [SerializeField] private FadeAnimation fadeAnimationSettings;
+
         private void Start()
         {
+            if (canvasGroup == null)
+            {
+                canvasGroup = GetComponent<CanvasGroup>();
+            }
+
             sequence = DOTween.Sequence();
 
             sequence.Pause();
@@ -139,6 +164,30 @@ namespace Malgo.Utilities.UI
                     .SetEase(scaleAnimationSettings.easeType));
             }
 
+            // Fade
+
+            float baseAlpha = 1;
+
+            if (uiAnimationType.Contains(AnimationType.Fade) && canvasGroup)
+            {
+                baseAlpha = canvasGroup.alpha;
+
+                float targetFade;
+                float duration = fadeAnimationSettings.duration;
+
+                if (fadeAnimationSettings.fadeType == FadeAnimation.FadeType.FadeIn)
+                {
+                    targetFade = baseAlpha + fadeAnimationSettings.fadeOffset;
+                }
+                else
+                {
+                    targetFade = baseAlpha - fadeAnimationSettings.fadeOffset;
+                }
+
+                sequence.Join
+                    (canvasGroup.DOFade(targetFade, duration)
+                    .SetEase(fadeAnimationSettings.easeType));
+            }
 
             // Add remaining animations for InOut types
             // Get the current sequence duration to insert second parts at the same time
@@ -214,6 +263,27 @@ namespace Malgo.Utilities.UI
             }
         }
 
+        public void PlayOnce(Action onComplete)
+        {
+            if (sequence != null && sequence.IsActive())
+            {
+                // Temporarily store original loop settings
+                int originalLoopCount = loopCount;
+                LoopType originalLoopType = loopType;
+                // Set to play only once
+                sequence.SetLoops(1, LoopType.Restart);
+                // Restart and play the sequence
+                sequence.Restart();
+                sequence.Play();
+                // Restore original loop settings after completion
+                sequence.OnComplete(() =>
+                {
+                    sequence.SetLoops(originalLoopCount, originalLoopType);
+                    onComplete?.Invoke();
+                });
+            }
+        }
+
         public void PlayAnimation()
         {
             sequence.Restart();
@@ -238,6 +308,7 @@ namespace Malgo.Utilities.UI
         Move,
         Rotate,
         Scale,
+        Fade,
     }
 #endif
 }

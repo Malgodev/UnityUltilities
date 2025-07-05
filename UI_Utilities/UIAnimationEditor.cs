@@ -28,7 +28,10 @@ namespace Malgo.Utilities.UI
                 {
                     continue;
                 }
-
+                if (property.name == "fadeAnimationSettings")
+                {
+                    continue;
+                }
                 EditorGUILayout.PropertyField(property, true);
             }
 
@@ -37,6 +40,7 @@ namespace Malgo.Utilities.UI
             bool hasMove = false;
             bool hasRotate = false;
             bool hasScale = false;
+            bool hasFade = false;
 
             for (int i = 0; i < animListProp.arraySize; i++)
             {
@@ -52,6 +56,10 @@ namespace Malgo.Utilities.UI
                 else if (item.enumValueIndex == (int)AnimationType.Rotate)
                 {
                     hasRotate = true;
+                }
+                else if (item.enumValueIndex == (int)AnimationType.Fade)
+                {
+                    hasFade = true;
                 }
             }
 
@@ -71,6 +79,12 @@ namespace Malgo.Utilities.UI
             {
                 SerializedProperty scaleSettings = serializedObject.FindProperty("scaleAnimationSettings");
                 EditorGUILayout.PropertyField(scaleSettings, true);
+            }
+
+            if (hasFade)
+            {
+                SerializedProperty fadeSettings = serializedObject.FindProperty("fadeAnimationSettings");
+                EditorGUILayout.PropertyField(fadeSettings, true);
             }
 
             serializedObject.ApplyModifiedProperties();
