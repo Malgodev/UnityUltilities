@@ -40,6 +40,7 @@ namespace Malgo.Utilities.UI
 
         private ToggleSwitchComponentGroupManager _toggleSwitchGroupManager;
 
+        public event Action OnToggleChanged;
         protected Action transitionEffect;
 
         protected virtual void OnValidate()
@@ -88,6 +89,7 @@ namespace Malgo.Utilities.UI
         public void OnPointerClick(PointerEventData eventData)
         {
             Toggle();
+            OnToggleChanged?.Invoke();
         }
 
 
