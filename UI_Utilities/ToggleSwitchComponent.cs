@@ -40,7 +40,7 @@ namespace Malgo.Utilities.UI
 
         private ToggleSwitchComponentGroupManager _toggleSwitchGroupManager;
 
-        public event Action OnToggleChanged;
+        public event Action OnToggleClicked;
         protected Action transitionEffect;
 
         protected virtual void OnValidate()
