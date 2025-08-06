@@ -89,7 +89,7 @@ namespace Malgo.Utilities.UI
         public void OnPointerClick(PointerEventData eventData)
         {
             Toggle();
-            OnToggleChanged?.Invoke();
+            OnToggleClicked?.Invoke();
         }
 
 
