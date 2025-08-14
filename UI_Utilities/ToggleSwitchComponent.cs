@@ -12,7 +12,7 @@ namespace Malgo.Utilities.UI
     public class ToggleSwitchComponent : MonoBehaviour, IPointerClickHandler
     {
         [Header("Slider setup")]
-        
+
         [SerializeField, Range(0, 1f)]
         protected float minValue;
 
@@ -80,7 +80,6 @@ namespace Malgo.Utilities.UI
             _toggleSwitchGroupManager = manager;
         }
 
-
         protected virtual void Awake()
         {
             SetupSliderComponent();
@@ -89,9 +88,8 @@ namespace Malgo.Utilities.UI
         public void OnPointerClick(PointerEventData eventData)
         {
             Toggle();
-            OnToggleChanged?.Invoke();
+            OnToggleClicked?.Invoke();
         }
-
 
         private void Toggle()
         {
@@ -103,8 +101,21 @@ namespace Malgo.Utilities.UI
 
         public void SetToggleValue(bool targetValue)
         {
-            _slider.value = sliderValue = targetValue ? maxValue : minValue;
-            //_previousValue = !targetValue;
+            // Ensure slider is initialized before using it
+            if (_slider == null)
+                SetupSliderComponent();
+
+            // Additional safety check
+            if (_slider != null)
+            {
+                _slider.value = sliderValue = targetValue ? maxValue : minValue;
+            }
+            else
+            {
+                // Fallback: just set the slider value for later use
+                sliderValue = targetValue ? maxValue : minValue;
+            }
+
             CurrentValue = targetValue;
         }
 
@@ -112,7 +123,6 @@ namespace Malgo.Utilities.UI
         {
             SetStateAndStartAnimation(valueToSetTo);
         }
-
 
         private void SetStateAndStartAnimation(bool state)
         {
@@ -133,9 +143,15 @@ namespace Malgo.Utilities.UI
             _animateSliderCoroutine = StartCoroutine(AnimateSlider());
         }
 
-
         private IEnumerator AnimateSlider()
         {
+            // Ensure slider is available before animating
+            if (_slider == null)
+                SetupSliderComponent();
+
+            if (_slider == null)
+                yield break;
+
             float startValue = _slider.value;
             float endValue = CurrentValue ? maxValue : minValue;
 
