@@ -1,3 +1,5 @@
+
+#if DOTWEEN
 using UnityEditor;
 using UnityEngine;
 
@@ -91,3 +93,4 @@ namespace Malgo.Utilities.UI
         }
     }
 }
+#endif

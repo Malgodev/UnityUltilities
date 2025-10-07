@@ -1,3 +1,4 @@
+#if DOTWEEN
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
@@ -5,7 +6,6 @@ using UnityEngine;
 
 namespace Malgo.Utilities.UI
 {
-#if DOTWEEN
     public class UIAnimation : MonoBehaviour
     {
         [SerializeField] private bool playOnStart = true;
@@ -310,5 +310,5 @@ namespace Malgo.Utilities.UI
         Scale,
         Fade,
     }
-#endif
 }
+#endif
