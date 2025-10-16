@@ -31,6 +31,44 @@ namespace Malgo.Utilities.Misc
             }
             EditorSceneManager.OpenScene(scenePath);
         }
+
+        public static void AddSceneToCurrentScene(int index)
+        {
+            SceneAsset[] scenes = AssetDatabase.FindAssets($"t:{nameof(SceneSwitcherConfiguration)}")
+                .Select(guid => AssetDatabase.LoadAssetAtPath<SceneSwitcherConfiguration>(UnityEditor.AssetDatabase.GUIDToAssetPath(guid)))
+                .FirstOrDefault(config => config != null && config.slots != null && index >= 0 && index < config.slots.Length)
+                ?.slots;
+            if (scenes == null || scenes.Length == 0 || index < 0 || index >= scenes.Length)
+            {
+                return;
+            }
+            SceneAsset sceneToLoad = scenes[index];
+            if (sceneToLoad == null)
+            {
+                return;
+            }
+            string scenePath = AssetDatabase.GetAssetPath(sceneToLoad);
+            if (string.IsNullOrEmpty(scenePath))
+            {
+                return;
+            }
+
+            // Check if scene is already loaded
+            UnityEngine.SceneManagement.Scene existingScene = EditorSceneManager.GetSceneByPath(scenePath);
+            if (existingScene.isLoaded)
+            {
+                // Scene is loaded, remove it
+                if (EditorSceneManager.sceneCount > 1)
+                {
+                    EditorSceneManager.CloseScene(existingScene, true);
+                }
+                return;
+            }
+
+            // Scene not loaded, add it
+            EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+        }
+
         [MenuItem("DevTools/Switch Scene/Slot 1 ^#&1")]
         public static void SwitchToScene_Slot1()
         {
@@ -76,6 +114,54 @@ namespace Malgo.Utilities.Misc
         {
             SwitchToScene(8);
         }
+
+        // Add Scene shortcuts (Ctrl+Alt+Shift + Q/W/E/R/T/Y/U/I/O)
+        [MenuItem("DevTools/Add Scene/Add Slot 1 ^#&q")]
+        public static void AddScene_Slot1()
+        {
+            AddSceneToCurrentScene(0);
+        }
+        [MenuItem("DevTools/Add Scene/Add Slot 2 ^#&w")]
+        public static void AddScene_Slot2()
+        {
+            AddSceneToCurrentScene(1);
+        }
+        [MenuItem("DevTools/Add Scene/Add Slot 3 ^#&e")]
+        public static void AddScene_Slot3()
+        {
+            AddSceneToCurrentScene(2);
+        }
+        [MenuItem("DevTools/Add Scene/Add Slot 4 ^#&r")]
+        public static void AddScene_Slot4()
+        {
+            AddSceneToCurrentScene(3);
+        }
+        [MenuItem("DevTools/Add Scene/Add Slot 5 ^#&t")]
+        public static void AddScene_Slot5()
+        {
+            AddSceneToCurrentScene(4);
+        }
+        [MenuItem("DevTools/Add Scene/Add Slot 6 ^#&y")]
+        public static void AddScene_Slot6()
+        {
+            AddSceneToCurrentScene(5);
+        }
+        [MenuItem("DevTools/Add Scene/Add Slot 7 ^#&u")]
+        public static void AddScene_Slot7()
+        {
+            AddSceneToCurrentScene(6);
+        }
+        [MenuItem("DevTools/Add Scene/Add Slot 8 ^#&i")]
+        public static void AddScene_Slot8()
+        {
+            AddSceneToCurrentScene(7);
+        }
+        [MenuItem("DevTools/Add Scene/Add Slot 9 ^#&o")]
+        public static void AddScene_Slot9()
+        {
+            AddSceneToCurrentScene(8);
+        }
+
         [MenuItem("DevTools/Switch Scene/Multi Scene ^#&k")]
         public static void SwitchToMultiScene()
         {

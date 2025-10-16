@@ -6,13 +6,13 @@ using UnityEngine.UI;
 using UnityEngine.U2D;
 #endif
 using Sprites = UnityEngine.Sprites;
-
 #if UNITY_EDITOR
 using UnityEditor;
-
+#endif
 
 namespace Malgo.Utilities.UI
 {
+#if UNITY_EDITOR
     // Custom Editor to order the variables in the Inspector similar to Image component
     [CustomEditor(typeof(SlicedFilledImage)), CanEditMultipleObjects]
     public class SlicedFilledImageEditor : Editor
@@ -43,7 +43,8 @@ namespace Malgo.Utilities.UI
     // Credit: https://bitbucket.org/Unity-Technologies/ui/src/2018.4/UnityEngine.UI/UI/Core/Image.cs
     [RequireComponent(typeof(CanvasRenderer))]
     [AddComponentMenu("UI/Sliced Filled Image", 11)]
-    public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver, ILayoutElement, ICanvasRaycastFilter
+    public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver, ILayoutElement,
+        ICanvasRaycastFilter
     {
         private static class SetPropertyUtility
         {
@@ -58,7 +59,8 @@ namespace Malgo.Utilities.UI
 
             public static bool SetClass<T>(ref T currentValue, T newValue) where T : class
             {
-                if ((currentValue == null && newValue == null) || (currentValue != null && currentValue.Equals(newValue)))
+                if ((currentValue == null && newValue == null) ||
+                    (currentValue != null && currentValue.Equals(newValue)))
                     return false;
 
                 currentValue = newValue;
@@ -66,7 +68,13 @@ namespace Malgo.Utilities.UI
             }
         }
 
-        public enum FillDirection { Right = 0, Left = 1, Up = 2, Down = 3 }
+        public enum FillDirection
+        {
+            Right = 0,
+            Left = 1,
+            Up = 2,
+            Down = 3
+        }
 
         private static readonly Vector3[] s_Vertices = new Vector3[4];
         private static readonly Vector2[] s_UVs = new Vector2[4];
@@ -76,8 +84,8 @@ namespace Malgo.Utilities.UI
 #pragma warning disable 1692
 #pragma warning disable IDE1006 // Suppress 'Naming rule violation' warnings
 #pragma warning disable 0649
-        [SerializeField]
-        private Sprite m_Sprite;
+        [SerializeField] private Sprite m_Sprite;
+
         public Sprite sprite
         {
             get { return m_Sprite; }
@@ -91,8 +99,8 @@ namespace Malgo.Utilities.UI
             }
         }
 
-        [SerializeField]
-        private FillDirection m_FillDirection;
+        [SerializeField] private FillDirection m_FillDirection;
+
         public FillDirection fillDirection
         {
             get { return m_FillDirection; }
@@ -103,9 +111,8 @@ namespace Malgo.Utilities.UI
             }
         }
 
-        [Range(0, 1)]
-        [SerializeField]
-        private float m_FillAmount = 1f;
+        [Range(0, 1)] [SerializeField] private float m_FillAmount = 1f;
+
         public float fillAmount
         {
             get { return m_FillAmount; }
@@ -116,8 +123,8 @@ namespace Malgo.Utilities.UI
             }
         }
 
-        [SerializeField]
-        private bool m_FillCenter = true;
+        [SerializeField] private bool m_FillCenter = true;
+
         public bool fillCenter
         {
             get { return m_FillCenter; }
@@ -128,8 +135,8 @@ namespace Malgo.Utilities.UI
             }
         }
 
-        [SerializeField]
-        private float m_PixelsPerUnitMultiplier = 1f;
+        [SerializeField] private float m_PixelsPerUnitMultiplier = 1f;
+
         public float pixelsPerUnitMultiplier
         {
             get { return m_PixelsPerUnitMultiplier; }
@@ -153,8 +160,8 @@ namespace Malgo.Utilities.UI
         }
 #pragma warning restore 0649
 
-        [NonSerialized]
-        private Sprite m_OverrideSprite;
+        [NonSerialized] private Sprite m_OverrideSprite;
+
         public Sprite overrideSprite
         {
             get { return activeSprite; }
@@ -168,7 +175,10 @@ namespace Malgo.Utilities.UI
             }
         }
 
-        private Sprite activeSprite { get { return m_OverrideSprite != null ? m_OverrideSprite : m_Sprite; } }
+        private Sprite activeSprite
+        {
+            get { return m_OverrideSprite != null ? m_OverrideSprite : m_Sprite; }
+        }
 
         public override Texture mainTexture
         {
@@ -385,7 +395,8 @@ namespace Malgo.Utilities.UI
                     if (sliceStart >= m_FillAmount)
                         continue;
 
-                    Vector4 vertices = new Vector4(s_SlicedVertices[x].x, s_SlicedVertices[y].y, s_SlicedVertices[x2].x, s_SlicedVertices[y2].y);
+                    Vector4 vertices = new Vector4(s_SlicedVertices[x].x, s_SlicedVertices[y].y, s_SlicedVertices[x2].x,
+                        s_SlicedVertices[y2].y);
                     Vector4 uvs = new Vector4(s_SlicedUVs[x].x, s_SlicedUVs[y].y, s_SlicedUVs[x2].x, s_SlicedUVs[y2].y);
                     float fillAmount = (m_FillAmount - sliceStart) / (sliceEnd - sliceStart);
 
@@ -484,11 +495,30 @@ namespace Malgo.Utilities.UI
             vh.AddTriangle(startIndex + 2, startIndex + 3, startIndex);
         }
 
-        int ILayoutElement.layoutPriority { get { return 0; } }
-        float ILayoutElement.minWidth { get { return 0; } }
-        float ILayoutElement.minHeight { get { return 0; } }
-        float ILayoutElement.flexibleWidth { get { return -1; } }
-        float ILayoutElement.flexibleHeight { get { return -1; } }
+        int ILayoutElement.layoutPriority
+        {
+            get { return 0; }
+        }
+
+        float ILayoutElement.minWidth
+        {
+            get { return 0; }
+        }
+
+        float ILayoutElement.minHeight
+        {
+            get { return 0; }
+        }
+
+        float ILayoutElement.flexibleWidth
+        {
+            get { return -1; }
+        }
+
+        float ILayoutElement.flexibleHeight
+        {
+            get { return -1; }
+        }
 
         float ILayoutElement.preferredWidth
         {
@@ -512,8 +542,13 @@ namespace Malgo.Utilities.UI
             }
         }
 
-        void ILayoutElement.CalculateLayoutInputHorizontal() { }
-        void ILayoutElement.CalculateLayoutInputVertical() { }
+        void ILayoutElement.CalculateLayoutInputHorizontal()
+        {
+        }
+
+        void ILayoutElement.CalculateLayoutInputVertical()
+        {
+        }
 
         bool ICanvasRaycastFilter.IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera)
         {
@@ -527,7 +562,8 @@ namespace Malgo.Utilities.UI
                 return true;
 
             Vector2 local;
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, eventCamera, out local))
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, eventCamera,
+                    out local))
                 return false;
 
             Rect rect = GetPixelAdjustedRect();
@@ -589,12 +625,17 @@ namespace Malgo.Utilities.UI
             }
             catch (UnityException e)
             {
-                Debug.LogError("Using alphaHitTestMinimumThreshold greater than 0 on Image whose sprite texture cannot be read. " + e.Message + " Also make sure to disable sprite packing for this sprite.", this);
+                Debug.LogError(
+                    "Using alphaHitTestMinimumThreshold greater than 0 on Image whose sprite texture cannot be read. " +
+                    e.Message + " Also make sure to disable sprite packing for this sprite.", this);
                 return true;
             }
         }
 
-        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
+        }
+
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
             m_FillAmount = Mathf.Clamp01(m_FillAmount);
