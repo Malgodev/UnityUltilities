@@ -6,19 +6,35 @@ namespace Malgo.Singleton
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     public class SingletonAttribute : Attribute
     {
-        public readonly string Name;
-        public readonly bool IsDontDestroy;
-
-        public SingletonAttribute(string _name, bool _isDontDestroy)
+        public enum SingletonDestroyStrategy
         {
-            Name = _name;
-            IsDontDestroy = _isDontDestroy;
+            DestroyThis,   // Destroy the new duplicate
+            DestroyOthers  // Destroy existing ones, keep this
         }
 
-        public SingletonAttribute(string _name)
+        /// <summary>
+        /// Prefab name to auto-load from Resources (optional)
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Whether to mark as DontDestroyOnLoad
+        /// </summary>
+        public bool IsDontDestroy { get; }
+
+        /// <summary>
+        /// Strategy when multiple instances exist
+        /// </summary>
+        public SingletonDestroyStrategy DestroyStrategy { get; }
+
+        public SingletonAttribute(
+            string name = null,
+            bool isDontDestroy = false,
+            SingletonDestroyStrategy destroyStrategy = SingletonDestroyStrategy.DestroyThis)
         {
-            Name = _name;
-            IsDontDestroy = false;
+            Name = name;
+            IsDontDestroy = isDontDestroy;
+            DestroyStrategy = destroyStrategy;
         }
     }
 }
