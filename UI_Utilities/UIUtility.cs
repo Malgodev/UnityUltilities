@@ -13,6 +13,18 @@ namespace Malgo.Utilities
 
             return normalized;
         }
+
+        public static Vector3 LocalRectToWorldPosition(RectTransform uiElement, Canvas canvas, Camera camera)
+        {
+            Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, uiElement.position);
+        
+            // Convert screen position to world position
+            // The Z distance determines how far from the camera the world position will be
+            float distanceFromCamera = canvas.planeDistance;
+            Vector3 worldPos = camera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, distanceFromCamera));
+        
+            return worldPos;
+        }
         
         public static bool IsPointerOverUIObject()
         {
