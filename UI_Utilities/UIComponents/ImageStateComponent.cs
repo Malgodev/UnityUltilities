@@ -25,8 +25,14 @@ namespace Hapiga.FoodSort
         public void SetState(int state)
         {
             currentStateIndex = state;
+
+            if (stateSprites.Length == 0) return;
             
-            image.sprite = stateSprites[currentStateIndex];
+            int index = Mathf.Clamp(currentStateIndex, 0, stateSprites.Length - 1);
+            
+            // if (index == currentStateIndex) return;
+            
+            image.sprite = stateSprites[index];
         }
     }
 }
