@@ -20,46 +20,30 @@ namespace Malgo.Utilities
             return normalized;
         }
         
-        public static Vector2 WordPositionToLocalRect(Vector3 position, RectTransform rectTransform)
+        public static Vector3 WordPositionToLocalRect(Vector3 position, Camera cam)
         {
-            Vector3 local = rectTransform.InverseTransformPoint(position);
-            Vector3 normalized = Rect.PointToNormalized(rectTransform.rect, local);
-
-            return normalized;
+            Vector3 screenPosition = cam.WorldToScreenPoint(position);
+            return screenPosition;
         }
 
+        // Note that this only works for Screen Space - Overlay canvas
         public static TransformData WorldTransformToUITransform(
             Transform target,
             Vector3 worldSize,
-            Camera cam,
-            RectTransform rectTransform,
-            Canvas canvas)
+            Camera cam)
         {
             TransformData result = new TransformData();
 
-            RectTransform canvasRect = canvas.GetComponent<RectTransform>();
-
-            Vector3 screenCenter = cam.WorldToScreenPoint(target.position);
-
-            Vector3 rightWorld = target.position + target.right * (worldSize.x * 0.5f);
-            Vector3 upWorld = target.position + target.up * (worldSize.y * 0.5f);
-
-            Vector3 screenRight = cam.WorldToScreenPoint(rightWorld);
-            Vector3 screenUp = cam.WorldToScreenPoint(upWorld);
-
-            float screenWidth = Mathf.Abs(screenRight.x - screenCenter.x) * 2f;
-            float screenHeight = Mathf.Abs(screenUp.y - screenCenter.y) * 2f;
-
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect,
-                screenCenter, cam, out Vector2 localPoint);
-
-            result.position = localPoint;
-
-            // Debug.Log(result.position);
+            Vector3 screenPos = WordPositionToLocalRect(target.position, cam);
+            Vector3 botLeftPos = target.position - worldSize / 2;
+            Vector3 topRightPos = target.position + worldSize / 2;
             
-            float scaleFactor = canvas.scaleFactor;
-            result.scale = new Vector3(screenWidth / scaleFactor, screenHeight / scaleFactor, 1f);
+            Vector3 screenBotLeftPos = WordPositionToLocalRect(botLeftPos, cam);
+            Vector3 screenTopRightPos = WordPositionToLocalRect(topRightPos, cam);
 
+            result.position = screenPos;
+            result.scale = screenTopRightPos - screenBotLeftPos;
+            
             return result;
         }
         
