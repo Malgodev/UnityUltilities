@@ -39,6 +39,17 @@ namespace Malgo.Utilities
             item.gameObject.SetActive(false);
         }
 
+        public void ReturnAll()
+        {
+            foreach (var item in pool)
+            {
+                if (!item.gameObject.activeInHierarchy)
+                {
+                    item.gameObject.SetActive(false);
+                }
+            }
+        }
+
         public T Add()
         {
             T instance = Object.Instantiate(prefab, parent);

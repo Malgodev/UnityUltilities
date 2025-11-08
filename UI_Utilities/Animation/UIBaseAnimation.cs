@@ -15,7 +15,7 @@ namespace Malgo.Utilities.UI
         [FoldoutGroup("Base Stat")] public Ease ease;
 
         [FoldoutGroup("Base Stat")] public LoopType loopType;
-        [FoldoutGroup("Base Stat")] protected float delayBetweenLoop;
+        [FoldoutGroup("Base Stat")] public float delayBetweenLoop;
         [FoldoutGroup("Base Stat")] public int loopCount;
 
         private void Start()

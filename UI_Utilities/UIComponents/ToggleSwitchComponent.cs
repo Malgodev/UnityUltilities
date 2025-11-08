@@ -41,6 +41,7 @@ namespace Malgo.Utilities.UI
         private ToggleSwitchComponentGroupManager _toggleSwitchGroupManager;
 
         public event Action OnToggleClicked;
+        public event Action<bool> OnToggleStateChanged;
         protected Action transitionEffect;
 
         protected virtual void OnValidate()
@@ -131,6 +132,7 @@ namespace Malgo.Utilities.UI
 
             if (_previousValue != CurrentValue)
             {
+                OnToggleStateChanged?.Invoke(CurrentValue);
                 if (CurrentValue)
                     onToggleOn?.Invoke();
                 else
