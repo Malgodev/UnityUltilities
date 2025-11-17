@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Hapiga.FoodSort
+namespace Malgo.Utilities.DataStructure
 {
     [Serializable]
     public class SerializableDictionary<TKey, TValue>

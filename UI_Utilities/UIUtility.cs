@@ -20,7 +20,7 @@ namespace Malgo.Utilities
             return normalized;
         }
         
-        public static Vector3 WordPositionToLocalRect(Vector3 position, Camera cam)
+        public static Vector3 WordPositionToUIPosition(Vector3 position, Camera cam)
         {
             Vector3 screenPosition = cam.WorldToScreenPoint(position);
             return screenPosition;
@@ -34,12 +34,12 @@ namespace Malgo.Utilities
         {
             TransformData result = new TransformData();
 
-            Vector3 screenPos = WordPositionToLocalRect(target.position, cam);
+            Vector3 screenPos = WordPositionToUIPosition(target.position, cam);
             Vector3 botLeftPos = target.position - worldSize / 2;
             Vector3 topRightPos = target.position + worldSize / 2;
             
-            Vector3 screenBotLeftPos = WordPositionToLocalRect(botLeftPos, cam);
-            Vector3 screenTopRightPos = WordPositionToLocalRect(topRightPos, cam);
+            Vector3 screenBotLeftPos = WordPositionToUIPosition(botLeftPos, cam);
+            Vector3 screenTopRightPos = WordPositionToUIPosition(topRightPos, cam);
 
             result.position = screenPos;
             result.scale = screenTopRightPos - screenBotLeftPos;

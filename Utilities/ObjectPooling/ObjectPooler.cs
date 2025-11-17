@@ -43,7 +43,7 @@ namespace Malgo.Utilities
         {
             foreach (var item in pool)
             {
-                if (!item.gameObject.activeInHierarchy)
+                if (item.gameObject.activeInHierarchy)
                 {
                     item.gameObject.SetActive(false);
                 }
