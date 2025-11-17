@@ -42,7 +42,10 @@ namespace Malgo.Utilities.DataStructure
         /// <summary>
         /// Optional: expose indexer-like access.
         /// </summary>
-        public TValue this[TKey key] => ToDictionary()[key];
+        public TValue this[TKey key] {
+            get => ToDictionary()[key];
+            set => dict[key] = value;
+        }
     }
 
     // How to use
