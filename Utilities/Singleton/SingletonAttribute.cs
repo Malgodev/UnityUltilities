@@ -12,6 +12,12 @@ namespace Malgo.Singleton
             DestroyOthers  // Destroy existing ones, keep this
         }
 
+        // public enum SingletonDestroyLifecycle
+        // {
+        //     OnDisable = 1,
+        //     OnDestroy = 2,
+        // }
+
         /// <summary>
         /// Prefab name to auto-load from Resources (optional)
         /// </summary>
@@ -26,15 +32,23 @@ namespace Malgo.Singleton
         /// Strategy when multiple instances exist
         /// </summary>
         public SingletonDestroyStrategy DestroyStrategy { get; }
+        
+        
+        // /// <summary>
+        // /// The lifecycle sequence that this game object will be destroyed
+        // /// </summary>
+        // public SingletonDestroyLifecycle DestroyLifecycle { get; }
 
         public SingletonAttribute(
             string name = null,
             bool isDontDestroy = false,
             SingletonDestroyStrategy destroyStrategy = SingletonDestroyStrategy.DestroyThis)
+            // SingletonDestroyLifecycle destroyLifecycle = SingletonDestroyLifecycle.OnDisable)
         {
             Name = name;
             IsDontDestroy = isDontDestroy;
             DestroyStrategy = destroyStrategy;
+            // DestroyLifecycle = destroyLifecycle;
         }
     }
 }
