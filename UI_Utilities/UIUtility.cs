@@ -59,41 +59,14 @@ namespace Malgo.Utilities
             return worldPos;
         }
         
-        static readonly List<RaycastResult> s_RaycastResults = new List<RaycastResult>();
-        
         public static bool IsPointerOverUIObject()
         {
-            if (EventSystem.current == null)
-            {
-                return false;
-            }
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = Input.mousePosition;
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
 
-            Vector2 pointerPos;
-
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-        var pointer = UnityEngine.InputSystem.Pointer.current;
-        if (pointer != null)
-        {
-            pointerPos = pointer.position.ReadValue();
-        }
-        else
-        {
-            pointerPos = Input.mousePosition;
-        }
-#else
-            pointerPos = Input.mousePosition;
-#endif
-
-            if (Input.touchCount > 0)
-            {
-                pointerPos = Input.GetTouch(0).position;
-            }
-
-            var eventData = new PointerEventData(EventSystem.current) { position = pointerPos };
-            s_RaycastResults.Clear();
-            EventSystem.current.RaycastAll(eventData, s_RaycastResults);
-
-            return s_RaycastResults.Count > 0;
+            return results.Count > 0;
         }
         
         public static bool IsPointerOverUIObject(Object exclusive)
