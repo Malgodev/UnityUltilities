@@ -1,1 +1,0 @@
-reference from the [Backbone Logger](https://assetstore.unity.com/packages/tools/utilities/backbone-logger-334586?srsltid=AfmBOorkZksz_sC6iJ_dSbroSqMQxPD2IW02i3xK-0-H3FOoIG9XVxHM) with some update follow by the Android Studio Logging system
