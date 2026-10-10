@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Malgo.Singleton
 {
-    public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+    public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T _instance;
 
@@ -24,7 +24,7 @@ namespace Malgo.Singleton
                     if (attribute.IsDontDestroy)
                         DontDestroyOnLoad(gameObject);
                     
-                    Init();
+                    Initialize();
                 }
                 else
                 {
@@ -40,7 +40,7 @@ namespace Malgo.Singleton
             if (attribute != null && attribute.IsDontDestroy)
                 DontDestroyOnLoad(gameObject);
             
-            Init();
+            Initialize();
         }
 
         protected virtual void OnDestroy()
@@ -49,7 +49,7 @@ namespace Malgo.Singleton
                 _instance = null;
         }
 
-        public abstract void Init();
+        public abstract void Initialize();
 
         public static T Instance
         {
