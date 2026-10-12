@@ -505,10 +505,14 @@ namespace Malgo.Utilities.UI
             get { return 0; }
         }
 
+        public float maxWidth { get; }
+
         float ILayoutElement.minHeight
         {
             get { return 0; }
         }
+
+        public float maxHeight { get; }
 
         float ILayoutElement.flexibleWidth
         {
